@@ -118,7 +118,14 @@ export default function Home() {
         </div>
       <div className={styles.container}>
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">Marketplace</h2>
-        { items.length === 0 ? <p className="text-gray-800">No items listed yet!</p> : <ItemsGrid items={items}/>}
+        { items.length === 0 ? <p className="text-gray-800">No items listed yet!</p> :
+          <ItemsGrid
+          items={items}
+          smartAccount={smartAccount}
+          provider={provider as ethers.providers.Provider}
+          address={address}
+          />
+        }
       </div>
     </MarketplaceLayout>
   )

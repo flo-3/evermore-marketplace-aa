@@ -18,3 +18,10 @@ export interface Listing {
   seller: string;
   currentlyListed: boolean;
 }
+
+export interface ClaimParams {
+  messageHash: string;
+  signature: string;
+  receiver: string;
+  tokenId: string;
+}

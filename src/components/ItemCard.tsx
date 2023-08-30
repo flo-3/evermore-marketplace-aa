@@ -1,18 +1,33 @@
 import { useState, useEffect } from "react";
 import nftABI from "@/lib/abi/nftABI.json";
 import { getContract } from "@/lib/contractUtils";
+import { ethers } from "ethers";
 
 import Image from 'next/image';
 import { Item } from "@/interfaces";
 import Badge from '@/components/ui';
+import ClaimButton from '@/components/ClaimButton';
 
 
-export default function ItemCard({ item } : { item: Item })
+export default function ItemCard(
+  {
+    item,
+    smartAccount,
+    provider,
+    address
+  } :
+  {
+    item: Item,
+    smartAccount: any, 
+    provider: ethers.providers.Provider
+    address: string
+  })
 {
   const [cardItem, setCardItem] = useState<Item>();
+  const [totalSupply, setTotalSupply] = useState<number>(0);
 
   useEffect(() => {
-    const initPage = async () => {
+    const getItemAttributes = async () => {
       try{
         const contract = getContract(item.contractAddress, nftABI);
         const tokenURI = await contract.tokenURI(item.tokenId);
@@ -34,11 +49,35 @@ export default function ItemCard({ item } : { item: Item })
         console.log(e);
       }
     }
+
+    const getTotalSupply = async () => {
+      try{
+        const contract = getContract(item.contractAddress, nftABI);
+        const totalSupply = await contract.itemSupply();
+        setTotalSupply(Number(totalSupply));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    const initPage = async () => {
+      await getItemAttributes();
+      await getTotalSupply();
+    }
+
     initPage();
   }, [])
 
   const actions = (
     <>
+      { (address) &&
+      <ClaimButton
+        smartAccount={smartAccount}
+        address={address}
+        provider={provider}
+        nftAddress={cardItem?.contractAddress as string}
+        tokenId={"10"}
+      /> }
     </>
   );
 

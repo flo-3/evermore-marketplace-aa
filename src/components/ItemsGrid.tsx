@@ -1,10 +1,24 @@
 import React, { useState } from "react";
+import { ethers } from "ethers";
 
 import ItemCard from "./ItemCard";
 import { Item } from "@/interfaces";
 
 
-export default function ItemsGrid( {items} : {items: Item[] }){
+export default function ItemsGrid(
+{
+    items,
+    smartAccount,
+    provider,
+    address
+    } :
+    {
+    items: Item[],
+    smartAccount: any, 
+    provider: ethers.providers.Provider
+    address: string
+    })
+{
     return (
         <div className="">
             <div className="flex justify-center items-center">
@@ -16,6 +30,9 @@ export default function ItemsGrid( {items} : {items: Item[] }){
                                     <div key={index}>
                                         <ItemCard
                                             item={item}
+                                            smartAccount={smartAccount}
+                                            provider={provider}
+                                            address={address}
                                         />
                                     </div>
                                 );
