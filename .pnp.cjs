@@ -884,7 +884,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/postcss", null],\
             ["browserslist", "npm:4.21.10"],\
             ["caniuse-lite", "npm:1.0.30001524"],\
-            ["fraction.js", "npm:4.3.1"],\
+            ["fraction.js", "npm:4.3.2"],\
             ["normalize-range", "npm:0.1.2"],\
             ["picocolors", "npm:1.0.0"],\
             ["postcss", "npm:8.4.29"],\
@@ -2088,10 +2088,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["fraction.js", [\
-        ["npm:4.3.1", {\
-          "packageLocation": "./.yarn/cache/fraction.js-npm-4.3.1-ce1111a074-8769badfd2.zip/node_modules/fraction.js/",\
+        ["npm:4.3.2", {\
+          "packageLocation": "./.yarn/cache/fraction.js-npm-4.3.2-e638ded005-21820632b8.zip/node_modules/fraction.js/",\
           "packageDependencies": [\
-            ["fraction.js", "npm:4.3.1"]\
+            ["fraction.js", "npm:4.3.2"]\
           ],\
           "linkType": "HARD"\
         }]\
