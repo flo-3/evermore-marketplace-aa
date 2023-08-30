@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BiconomySmartAccount, BiconomySmartAccountConfig, DEFAULT_ENTRYPOINT_ADDRESS } from "@biconomy/account";
 import { ethers  } from 'ethers';
 import { ChainId } from "@biconomy/core-types";
@@ -6,7 +6,9 @@ import { ParticleProvider } from "@biconomy/particle-auth";
 
 import { particle } from "@/lib/particle";
 import { paymaster, bundler } from "@/lib/biconomy";
-import { Item } from "@/interfaces";
+import marketplaceABI from "@/lib/abi/marketplaceABI.json";
+import { Listing, Item } from "@/interfaces";
+import { mumbaiProvider, getContract } from "@/lib/contractUtils";
 
 import styles from "@/styles/Home.module.css";
 
@@ -22,6 +24,33 @@ export default function Home() {
   const [smartAccount, setSmartAccount] = useState<BiconomySmartAccount | null>(null);
   const [provider, setProvider] = useState<ethers.providers.Provider | null>(null);
   const [items, setItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    const initPage = async () => {
+      await getListedItems();
+    }
+    initPage();
+  }, [])
+
+  const getListedItems = async () => {
+    const contract = getContract(process.env.NEXT_PUBLIC_MARKETPLACE_ADDRESS as string, marketplaceABI, mumbaiProvider);
+    const listings: Listing[] = await contract.fetchListedItems();
+    // Transform the listings into items
+    const items: Item[] = listings.map((listing) => {
+      let price = Number(listing.price) / 10 ** 18;
+      return {
+        contractAddress: listing.contractAddress,
+        tokenId: Number(listing.tokenId).toString(),
+        price: (price * 100000).toString(),  // super small default price ATM, make it more real
+        name: "",
+        image_url: '',
+        originalPrice: '',
+        merchant: '',
+        description: '',
+      }
+    });
+    setItems(items);
+  }
 
   const connect = async () => {
     try {

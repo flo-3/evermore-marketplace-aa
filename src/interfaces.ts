@@ -6,5 +6,15 @@ export interface Item {
   price: string;
   image_url: string;
   name: string;
-  nextAvailable: string;
+  description: string;
+  merchant: string;
+  originalPrice: string;
+}
+
+export interface Listing {
+  contractAddress: string;
+  tokenId: string;
+  price: string;
+  seller: string;
+  currentlyListed: boolean;
 }

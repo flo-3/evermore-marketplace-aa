@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import nftABI from "@/lib/abi/nftABI.json";
+import { getContract } from "@/lib/contractUtils";
+
 import Image from 'next/image';
 import { Item } from "@/interfaces";
 import Badge from '@/components/ui';
@@ -6,10 +9,33 @@ import Badge from '@/components/ui';
 
 export default function ItemCard({ item } : { item: Item })
 {
+  const [cardItem, setCardItem] = useState<Item>();
 
-  const [isApproved, setIsApproved] = useState<boolean>(false);
-  const [itemPrice, setItemPrice] = useState<string>("0.001");
-
+  useEffect(() => {
+    const initPage = async () => {
+      try{
+        const contract = getContract(item.contractAddress, nftABI);
+        const tokenURI = await contract.tokenURI(item.tokenId);
+        // replace ipfs:// with https://ipfs.io/ipfs/
+        if (!tokenURI.startsWith("ipfs://")) {
+          console.log("Invalid tokenURI", tokenURI, item.tokenId);
+          return;
+        }
+        const url = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+        const response = await fetch(url);
+        const data = await response.json();
+        item.name = data.name;
+        item.image_url = data.image;
+        item.originalPrice = data.original_price;
+        item.merchant = data.merchant;
+        item.description = data.description;
+        setCardItem(item);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    initPage();
+  }, [])
 
   const actions = (
     <>
@@ -21,16 +47,16 @@ export default function ItemCard({ item } : { item: Item })
   return (
     <>
       {
-        item &&
+        cardItem &&
         <div className="relative max-w-sm bg-white shadow-md rounded-3xl p-2 mx-1 my-3 cursor-pointer text-left">
           <div className="overflow-x-hidden rounded-2xl relative">
-            <Image className="h-80 rounded-2xl w-full object-cover" src={item.image_url.startsWith("http") ? item.image_url : "/products/" + item.image_url} width="800" height="800" alt={item.name}/>
+            <Image className="h-80 rounded-2xl w-full object-cover" src={cardItem.image_url} width="800" height="800" alt={cardItem.name}/>
             <Badge color='secondary' className="absolute right-2 top-2">{itemStatus.toUpperCase()}</Badge>
           </div>
           <div className="mt-4 pl-2 mb-2 flex justify-between ">
             <div>
-              <p className="text-lg font-semibold text-gray-900 mb-0  min-h-[60px]">{item.name}</p>
-              <p className="text-md text-gray-800 mt-0"> $ {item.price}</p>
+              <p className="text-lg font-semibold text-gray-900 mb-0  min-h-[60px]">{cardItem.name}</p>
+              <p className="text-md text-gray-800 mt-0"> <span className="line-through">$ {cardItem.originalPrice}</span> $ {cardItem.price}</p>
             </div>
           </div>
           <div className="">
