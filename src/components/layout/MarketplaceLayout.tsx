@@ -10,7 +10,7 @@ export default function MarketplaceLayout({ children }: Props) {
   return (
     <>
       <Header/>
-      <main>{children}</main>
+      <main className='bg-container'>{children}</main>
       <Footer/>
     </>
   );
