@@ -266,7 +266,7 @@ export default function Home() {
       <div className=''>
         {
           section === 1 &&
-          <NFTSection mode="claim" items={claimableItems} title="Claim your Diagital Product Passport" reloadFunction={getClaimableItems}/>
+          <NFTSection mode="claim" items={claimableItems} title="Claim your Digital Product Passport" reloadFunction={getClaimableItems}/>
         }
         {
           section === 2 && address &&
@@ -280,7 +280,7 @@ export default function Home() {
               </div>
         }
         {
-          section === 3 && <NFTSection mode="buy" items={buyableItems} title="Buy preloved items" reloadFunction={getListedItems}/>
+          section === 3 && <NFTSection mode="buy" items={buyableItems} title="Buy pre-loved items" reloadFunction={getListedItems}/>
         }
 
       </div>
