@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BiconomySmartAccount, BiconomySmartAccountConfig, DEFAULT_ENTRYPOINT_ADDRESS } from "@biconomy/account";
+import { BiconomySmartAccount, BiconomySmartAccountConfig } from "@biconomy/account";
 import { ethers  } from 'ethers';
 import { ChainId } from "@biconomy/core-types";
 import { ParticleProvider } from "@biconomy/particle-auth";

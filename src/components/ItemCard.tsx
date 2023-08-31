@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Item } from "@/interfaces";
 import Badge from '@/components/ui';
 import ClaimButton from '@/components/ClaimButton';
+import ResellButton from "@/components/ResellButton";
 
 
 export default function ItemCard(
@@ -112,6 +113,15 @@ export default function ItemCard(
           tokenId={claimTokenId}
         />
         </>
+      }
+      { (address && mode === "manage") &&
+        <ResellButton
+          smartAccount={smartAccount}
+          address={address}
+          provider={provider}
+          nftAddress={cardItem?.contractAddress as string}
+          tokenId={item.tokenId}
+        />
       }
     </>
   );

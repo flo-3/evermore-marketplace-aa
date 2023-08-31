@@ -5,7 +5,6 @@ export const particle = new ParticleAuthModule.ParticleNetwork({
   clientKey: process.env.NEXT_PUBLIC_PARTICLE_CLIENT_KEY as string,
   appId: process.env.NEXT_PUBLIC_PARTICLE_APP_ID as string,
   wallet: {
-    displayWalletEntry: true,
-    defaultWalletEntryPosition: ParticleAuthModule.WalletEntryPosition.BR,
+    displayWalletEntry: false,
   },
 });

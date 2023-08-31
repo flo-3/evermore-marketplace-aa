@@ -1,0 +1,1 @@
+export const DEFAULT_RESELL_PRICE = "0.001";
