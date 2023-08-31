@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 
-const polygonRPC = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`
-export const mumbaiProvider = new ethers.providers.JsonRpcProvider(polygonRPC, { chainId: 80001, name: "polygon-mumbai" });
+const mumbaiBaseURL = "https://polygon-mumbai.g.alchemy.com";
+const mumbaiRPC = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`;
+export const mumbaiProvider = new ethers.providers.JsonRpcProvider(mumbaiRPC, { chainId: 80001, name: "polygon-mumbai" });
 
 export function getContract(address: string, abi: any, provider: ethers.providers.Provider = mumbaiProvider) {
   return new ethers.Contract(address, abi, mumbaiProvider);
@@ -37,4 +38,21 @@ export async function getClaimParams(wallet: string, tokenId: string) {
     tokenId: tokenId
   };
   return claimParams;
+}
+
+export async function getWalletNFTs(wallet: string) {
+  if (!wallet) {
+    return [];
+  }
+  try {
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+    const response = await fetch(
+      `${mumbaiBaseURL}/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}/getNFTsForOwner?owner=${wallet}&withMetadata=true&pageSize=100`,
+      options
+      );
+    const json = await response.json();
+    return json.ownedNfts;
+  } catch (error) {
+    throw error;
+  }
 }

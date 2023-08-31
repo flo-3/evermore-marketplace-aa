@@ -89,7 +89,7 @@ const ClaimButton: React.FC<Props> = ({ smartAccount, address, provider, nftAddr
       <div className='text-black w-full text-center'>
       { address && !minted && !minting && <button onClick={handleMint} className="btn btn-blue w-full" disabled={!tokenId}>Claim your item for free! Number {tokenId}</button> }
       { address && minted && !minting && <span className='w-full'>Congratulations! You now own the item {tokenId}!</span> }
-      { address && minting && <span className='w-full'>Minting...</span> }
+      { address && minting && <span className='w-full'>Claiming...</span> }
       </div>
     </>
   )

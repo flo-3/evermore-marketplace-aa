@@ -8,7 +8,7 @@ import { particle } from "@/lib/particle";
 import { paymaster, bundler } from "@/lib/biconomy";
 import marketplaceABI from "@/lib/abi/marketplaceABI.json";
 import { Listing, Item } from "@/interfaces";
-import { getContract, getBalance } from "@/lib/contractUtils";
+import { getContract, getBalance, getWalletNFTs } from "@/lib/contractUtils";
 
 import styles from "@/styles/Home.module.css";
 
@@ -32,16 +32,24 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [smartAccount, setSmartAccount] = useState<BiconomySmartAccount | null>(null);
   const [provider, setProvider] = useState<ethers.providers.Provider | null>(null);
-  const [buyableItems, setBuyableItems] = useState<Item[]>([]);
-  const [claimableItems, setClaimableItems] = useState<Item[]>([]);
+  const [buyableItems, setBuyableItems] = useState<Item[]>();
+  const [claimableItems, setClaimableItems] = useState<Item[]>();
+  const [userItems, setUserItems] = useState<Item[]>();
 
   useEffect(() => {
     const initPage = async () => {
-      getClaimableItems();
-      await getListedItems();
+      if (!claimableItems) {
+        getClaimableItems();
+      }
+      if (!userItems && address) {
+        getUserItems();
+      }
+      if (!buyableItems) {
+        await getListedItems();
+      }
     }
     initPage();
-  }, [])
+  }, [address])
 
   const getClaimableItems = () => {
     const items: Item[] = availableSCs.map((sc) => {
@@ -57,6 +65,26 @@ export default function Home() {
       }
     });
     setClaimableItems(items);
+  }
+
+  const getUserItems = async () => {
+    if (!address) {
+      return;
+    }
+    const nfts = await getWalletNFTs(address);
+    const items: Item[] = nfts.map((nft: any) => {
+      return {
+        contractAddress: nft.contract.address,
+        tokenId: nft.tokenId,
+        price: '',
+        name: '',
+        image_url: '',
+        originalPrice: '',
+        merchant: '',
+        description: '',
+      }
+    });
+    setUserItems(items);
   }
 
   const getListedItems = async () => {
@@ -123,6 +151,10 @@ export default function Home() {
     }
   }
 
+  const handleSectionReload = async (reloadFunction: Function) => {
+    await reloadFunction();
+  }
+
   // Connect button component
   const ConnectButton = () => {
     return (
@@ -137,6 +169,31 @@ export default function Home() {
     )
   }
 
+  // Section component
+  const NFTSection = ({ mode, items, title, reloadFunction }  : { mode: string, items: Item[] | undefined, title: string, reloadFunction: Function }) => {
+    return (
+      <div className={styles.container}>
+        <div className="flex justify-between">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-4">{title}</h2>
+        <button onClick={() => handleSectionReload(reloadFunction)} className="btn text-black mt-[-20px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M13.5 2c-5.621 0-10.211 4.443-10.475 10h-3.025l5 6.625 5-6.625h-2.975c.257-3.351 3.06-6 6.475-6 3.584 0 6.5 2.916 6.5 6.5s-2.916 6.5-6.5 6.5c-1.863 0-3.542-.793-4.728-2.053l-2.427 3.216c1.877 1.754 4.389 2.837 7.155 2.837 5.79 0 10.5-4.71 10.5-10.5s-4.71-10.5-10.5-10.5z"/>
+          </svg>
+        </button>
+        </div>
+        { !items || items.length === 0 ? <p className="text-gray-800">No items listed yet!</p> :
+          <ItemsGrid
+          mode={mode}
+          items={items}
+          smartAccount={smartAccount}
+          provider={provider as ethers.providers.Provider}
+          address={address}
+          />
+        }
+      </div>
+    )
+  }
+
   return (
     <MarketplaceLayout>
       <div className="float-right text-black">
@@ -146,32 +203,18 @@ export default function Home() {
             {address && <h2 className='m-4 text-black'>Welcome {email}!</h2>}
             {address && <LogoutButton/>}
           </div>
-          <div className='ml-4 mt-0'>Your balance: {balance}</div>
+          { address && <div className='ml-4 mt-0'>Your balance: {balance}</div> }
         </div>
-        <div className={styles.container}>
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4">1. Claim your Diagital Product Passport</h2>
-        { claimableItems.length === 0 ? <p className="text-gray-800">No items listed yet!</p> :
-          <ItemsGrid
-          mode="claim"
-          items={claimableItems}
-          smartAccount={smartAccount}
-          provider={provider as ethers.providers.Provider}
-          address={address}
-          />
+        <NFTSection mode="claim" items={claimableItems} title="1. Claim your Diagital Product Passport" reloadFunction={getClaimableItems}/>
+        { address ?
+          <NFTSection mode="manage" items={userItems} title="2. Resale the items you do not need anymore" reloadFunction={getUserItems}/>
+          :
+          <div className={styles.container}>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4">2. Resale the items you do not need anymore</h2>
+            <p className="text-gray-800">Login to sell your items</p>
+          </div>
         }
-      </div>
-      <div className={styles.container}>
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4">Marketplace</h2>
-        { buyableItems.length === 0 ? <p className="text-gray-800">No items listed yet!</p> :
-          <ItemsGrid
-          mode="buy"
-          items={buyableItems}
-          smartAccount={smartAccount}
-          provider={provider as ethers.providers.Provider}
-          address={address}
-          />
-        }
-      </div>
+        <NFTSection mode="buy" items={buyableItems} title="3. Buy preloved items" reloadFunction={getListedItems}/>
     </MarketplaceLayout>
   )
 }
