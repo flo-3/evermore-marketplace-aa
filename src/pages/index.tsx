@@ -61,6 +61,7 @@ export default function Home() {
         contractAddress: sc,
         tokenId: '1', // set default value to charge the metadata. The tokenId to be claimed is set in the claim function
         price: '',
+        displayPrice: '',
         name: '',
         image_url: '',
         originalPrice: '',
@@ -81,6 +82,7 @@ export default function Home() {
         contractAddress: nft.contract.address,
         tokenId: nft.tokenId,
         price: '',
+        displayPrice: '',
         name: '',
         image_url: '',
         originalPrice: '',
@@ -96,11 +98,12 @@ export default function Home() {
     const listings: Listing[] = await contract.fetchListedItems();
     // Transform the listings into items
     const items: Item[] = listings.map((listing) => {
-      let price = Number(listing.price) / 10 ** 18;
+      console.log("listing: ", listing);
       return {
         contractAddress: listing.contractAddress,
         tokenId: Number(listing.tokenId).toString(),
-        price: (price * 100000).toString(),  // super small default price ATM, make it more real
+        price: Number(listing.price).toString(),
+        displayPrice: ((Number(listing.price) / 10 ** 18) * 100000).toString(), // super small default price ATM, make it more real
         name: "",
         image_url: '',
         originalPrice: '',
@@ -213,7 +216,7 @@ export default function Home() {
               <li className="mr-2">
                   <button onClick={() => handleSectionSelect(1)} className={section === 1 ? activeClass : defaultClass}>
                   <svg className={section === 1 ? activeIconClass : defaultIconClass}  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3"/>
+                    <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3"/>
                 </svg>Claim
                   </button>
               </li>

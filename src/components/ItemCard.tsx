@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import nftABI from "@/lib/abi/nftABI.json";
 import { getContract } from "@/lib/contractUtils";
 import { ethers } from "ethers";
+import { BiconomySmartAccount } from "@biconomy/account";
 
 import Image from 'next/image';
 import { Item } from "@/interfaces";
@@ -9,22 +10,25 @@ import Badge from '@/components/ui';
 import ClaimButton from '@/components/ClaimButton';
 import ResellButton from "@/components/ResellButton";
 
+interface Props {
+  item: Item,
+  smartAccount: BiconomySmartAccount,
+  provider: ethers.providers.Provider,
+  address: string,
+  mode: string,
+  addToCart: (item: Item) => void,
+}
 
-export default function ItemCard(
+
+const ItemCard: React.FC<Props> = (
   {
     item,
     smartAccount,
     provider,
     address,
-    mode
-  } :
-  {
-    item: Item,
-    smartAccount: any, 
-    provider: ethers.providers.Provider
-    address: string,
-    mode: string
-  })
+    mode,
+    addToCart
+  }) =>
 {
   const [cardItem, setCardItem] = useState<Item>();
   const [totalSupply, setTotalSupply] = useState<number>(0);
@@ -123,6 +127,14 @@ export default function ItemCard(
           tokenId={item.tokenId}
         />
       }
+      {
+        (mode === "buy") &&
+        <button
+          className="btn btn-blue w-full"
+          onClick={() => addToCart(item)}
+        > Add to Cart
+        </button>
+      }
     </>
   );
 
@@ -142,7 +154,7 @@ export default function ItemCard(
               <p className="text-lg font-semibold text-gray-900 mb-0  min-h-[60px]">{cardItem.name}</p>
               {
                 (mode === "buy") &&
-                <p className="text-md text-gray-800 mt-0"> <span className="line-through">$ {cardItem.originalPrice}</span> $ {cardItem.price}</p>
+                <p className="text-md text-gray-800 mt-0"> <span className="line-through">$ {cardItem.originalPrice}</span> $ {item.displayPrice}</p>
               }
             </div>
           </div>
@@ -154,3 +166,5 @@ export default function ItemCard(
     </>
   );
 }
+
+export default ItemCard;

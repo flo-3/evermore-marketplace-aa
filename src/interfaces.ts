@@ -9,6 +9,7 @@ export interface Item {
   description: string;
   merchant: string;
   originalPrice: string;
+  displayPrice: string;
 }
 
 export interface Listing {

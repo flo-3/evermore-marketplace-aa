@@ -37,11 +37,11 @@ const config: Config = {
             backgroundColor: '#2779bd'
           },
         },
-        '.btn-red': {
-          backgroundColor: '#e3342f',
+        '.btn-black': {
+          backgroundColor: 'black',
           color: '#fff',
           '&:hover': {
-            backgroundColor: '#cc1f1a'
+            backgroundColor: 'lightblack'
           },
         },
         '.bg-container': {
