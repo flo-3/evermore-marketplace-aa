@@ -24,6 +24,11 @@ const config: Config = {
           padding: '.5rem 1rem',
           borderRadius: '.25rem',
           fontWeight: '600',
+          '&:disabled': {
+            opacity: '.5',
+            cursor: 'not-allowed',
+            backgroundColor: '#c6c4c4',
+          },
         },
         '.btn-blue': {
           backgroundColor: '#3490dc',

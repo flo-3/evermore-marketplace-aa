@@ -7,6 +7,11 @@ export function getContract(address: string, abi: any, provider: ethers.provider
   return new ethers.Contract(address, abi, mumbaiProvider);
 }
 
+export async function getBalance(address: string, provider: ethers.providers.Provider = mumbaiProvider) {
+  const balance = await provider.getBalance(address);
+  return ethers.utils.formatEther(balance);
+}
+
 function createClaimMessageHash(receiver: string, tokenId: string) {
   const message = ethers.utils.solidityKeccak256(
     ['address', 'uint256'],

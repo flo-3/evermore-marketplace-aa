@@ -10,13 +10,15 @@ export default function ItemsGrid(
     items,
     smartAccount,
     provider,
-    address
+    address,
+    mode
     } :
     {
     items: Item[],
     smartAccount: any, 
     provider: ethers.providers.Provider
-    address: string
+    address: string,
+    mode: string
     })
 {
     return (
@@ -29,6 +31,7 @@ export default function ItemsGrid(
                                 return (
                                     <div key={index}>
                                         <ItemCard
+                                            mode={mode}
                                             item={item}
                                             smartAccount={smartAccount}
                                             provider={provider}
