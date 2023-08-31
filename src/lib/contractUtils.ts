@@ -28,7 +28,6 @@ async function signMessage(messageHash: string, privateKey: string) {
 }
 
 export async function getClaimParams(wallet: string, tokenId: string) {
-  console.log(wallet, tokenId);
   const messageHash = createClaimMessageHash(wallet, tokenId);
   const signature = await signMessage(messageHash, process.env.NEXT_PUBLIC_SIGNER_PRIVATE_KEY as string);
   const claimParams = {

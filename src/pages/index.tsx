@@ -98,7 +98,6 @@ export default function Home() {
     const listings: Listing[] = await contract.fetchListedItems();
     // Transform the listings into items
     const items: Item[] = listings.map((listing) => {
-      console.log("listing: ", listing);
       return {
         contractAddress: listing.contractAddress,
         tokenId: Number(listing.tokenId).toString(),

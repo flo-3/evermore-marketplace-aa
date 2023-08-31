@@ -32,7 +32,6 @@ const ClaimButton: React.FC<Props> = ({ smartAccount, address, provider, nftAddr
       }
       const claimParams = await getClaimParams(address, tokenId);
       setClaimParams(claimParams);
-      console.log({ claimParams })
     }
     if (tokenId) {
       initClaimParams();
