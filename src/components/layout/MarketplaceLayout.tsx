@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { Header } from './Header';
 import Footer from './Footer';
 
 type Props = {
@@ -9,7 +8,6 @@ type Props = {
 export default function MarketplaceLayout({ children }: Props) {
   return (
     <>
-      <Header/>
       <main className='bg-container'>{children}</main>
       <Footer/>
     </>
