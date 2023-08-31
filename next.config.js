@@ -12,7 +12,7 @@ const nextConfig = {
     return config
   },
   images: {
-    domains: ['localhost', 'evermore-merchant.s3.eu-west-3.amazonaws.com', 'cdn.shopify.com'],
+    domains: ['localhost', 'evermore-merchant.s3.eu-west-3.amazonaws.com', 'cdn.shopify.com', 'ipfs.io'],
   },
 }
 

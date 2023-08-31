@@ -23,7 +23,8 @@ import Logo from "/public/logo.png";
 const availableSCs = [
   "0x1677b439498889b454bcb75fd9f0dd5f75383cf2",
   "0xa7CC74ff0725a39b7498d436b89f792053999AeA",
-  "0xd3c2f080e69ce50f6f0bcaca45cacb50afb6d555"
+  "0xd3c2f080e69ce50f6f0bcaca45cacb50afb6d555",
+  "0x2B72bD671d9d716B8cc026883a913Dc2528B3aEd",
 ]
 
 
@@ -215,7 +216,7 @@ export default function Home() {
               <li className="mr-2">
                   <button onClick={() => handleSectionSelect(1)} className={section === 1 ? activeClass : defaultClass}>
                   <svg className={section === 1 ? activeIconClass : defaultIconClass}  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 18">
-                    <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3"/>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3"/>
                 </svg>Claim
                   </button>
               </li>
